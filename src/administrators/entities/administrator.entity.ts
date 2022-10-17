@@ -1,6 +1,6 @@
 
 
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Administrator {
@@ -12,4 +12,7 @@ export class Administrator {
 
   @Column({type: 'text'})
   passwordDigest:string
+
+  @CreateDateColumn()
+  createdAt:Date
 }
