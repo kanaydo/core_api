@@ -12,7 +12,7 @@ export const dataSource = new DataSource({
   password: '',
   database: 'core_api_dev',
   entities: [cwd() + '/src/**/*.entity.ts'],
-  migrations: [cwd() + '/src/migrations/*.ts'],
+  migrations: [cwd() + '/src/database/migrations/*.ts'],
   migrationsTableName: 'migrations',
   synchronize: false,
   dropSchema: false,
