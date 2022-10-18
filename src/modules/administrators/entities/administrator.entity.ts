@@ -2,17 +2,17 @@
 
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity({name: 'administrators'})
 export class Administrator {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({type: 'text', unique: true})
+  @Column({type: 'text', unique: true, name: 'username'})
   username:string
 
-  @Column({type: 'text'})
+  @Column({type: 'text', name: 'password_digest'})
   passwordDigest:string
 
-  @CreateDateColumn()
+  @CreateDateColumn({name: 'created_at'})
   createdAt:Date
 }
