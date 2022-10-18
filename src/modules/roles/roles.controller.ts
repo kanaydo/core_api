@@ -3,6 +3,7 @@ import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { QueryFailedExceptionFilter } from 'src/utils/query_failed_exception.filter';
+import { availableSections } from './data/sections/sections';
 
 @Controller('roles')
 export class RolesController {
@@ -12,6 +13,11 @@ export class RolesController {
   @UseFilters(QueryFailedExceptionFilter)
   create(@Body() createRoleDto: CreateRoleDto) {
     return this.rolesService.create(createRoleDto);
+  }
+
+  @Get('new')
+  new() {
+    return availableSections;
   }
 
   @Get()
