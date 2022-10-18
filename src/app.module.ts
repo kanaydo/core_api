@@ -5,11 +5,13 @@ import { AdministratorsModule } from './modules/administrators/administrators.mo
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { typeOrmAsyncConfig } from './config/typeorm.config';
+import { RolesModule } from './modules/roles/roles.module';
 
 @Module({
   imports: [
-    AdministratorsModule,
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
+    AdministratorsModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
