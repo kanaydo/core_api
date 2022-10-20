@@ -52,6 +52,7 @@ export class AdministratorsService {
 
     const cachedSections = await this.cacheManager.get(`ADMIN_SECTION_${id}`);
     if (cachedSections) {
+      // console.log('cached sections', cachedSections);
       return cachedSections as string[];
     }
 
@@ -63,6 +64,7 @@ export class AdministratorsService {
     const sections = roles.map((r) => r.sections).flat();
     const uniqueSection = [...new Set(sections)];
     await this.cacheManager.set(`ADMIN_SECTION_${id}`, uniqueSection);
+    // console.log('sections', uniqueSection);
     return uniqueSection;
   }
 }

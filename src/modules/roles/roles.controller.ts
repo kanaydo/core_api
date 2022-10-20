@@ -1,17 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseFilters, UseGuards, Req } from '@nestjs/common';
-import { Request } from 'express';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { QueryFailedExceptionFilter } from 'src/utils/query_failed_exception.filter';
 import { availableSections } from './data/sections/sections';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolePermissions } from './roles.permissions';
 import { RequirePermissions } from 'src/utils/require_permissions.decorator';
-import { RolesGuard } from 'src/guard/roles.guard';
 
 @Controller('roles')
-// @UseGuards(JwtAuthGuard, RolesGuard)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
@@ -44,6 +40,7 @@ export class RolesController {
   @UseFilters(QueryFailedExceptionFilter)
   @RequirePermissions(RolePermissions.ROLE_UPDATE)
   update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
+    console.log(updateRoleDto);
     return this.rolesService.update(+id, updateRoleDto);
   }
 

@@ -1,16 +1,16 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseFilters } from '@nestjs/common';
 import { QueryFailedExceptionFilter } from 'src/utils/query_failed_exception.filter';
 import { RequirePermissions } from 'src/utils/require_permissions.decorator';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdministratorPermissions } from './administrators.permissions';
 import { AdministratorsService } from './administrators.service';
 import { CreateAdministratorDto } from './dto/create-administrator.dto';
 import { UpdateAdministratorDto } from './dto/update-administrator.dto';
 
 @Controller('administrators')
-@UseGuards(JwtAuthGuard)
 export class AdministratorsController {
-  constructor(private readonly administratorsService: AdministratorsService) {}
+  constructor(
+    private readonly administratorsService: AdministratorsService
+  ) {}
 
   @Post()
   @UseFilters(QueryFailedExceptionFilter)
@@ -37,6 +37,7 @@ export class AdministratorsController {
   @UseFilters(QueryFailedExceptionFilter)
   @RequirePermissions(AdministratorPermissions.ADMINISTRATOR_UPDATE)
   update(@Param('id') id: string, @Body() updateAdministratorDto: UpdateAdministratorDto) {
+    console.log(updateAdministratorDto);
     return this.administratorsService.update(+id, updateAdministratorDto);
   }
 
