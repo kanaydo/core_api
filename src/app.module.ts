@@ -7,6 +7,8 @@ import { DataSource } from 'typeorm';
 import { typeOrmAsyncConfig } from './config/typeorm.config';
 import { RolesModule } from './modules/roles/roles.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './guard/roles.guard';
 
 @Module({
   imports: [
@@ -16,7 +18,13 @@ import { AuthModule } from './modules/auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard
+    }
+  ],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}

@@ -4,4 +4,5 @@ import { Administrator } from "../entities/administrator.entity"
 export class CreateAdministratorDto extends PartialType(Administrator) {
   username: string
   password: string
+  roleList: number[]
 }

@@ -18,16 +18,17 @@ export class AuthService {
     if (user) {
       const validPass = await bcrypt.compare(pass, user.passwordDigest);
       if (validPass) {
-        const jwtToken = await this.login(user);
-        return jwtToken;
+        return user;
+      } else {
+        return null;
       }
-      return null;
     }
     return null;
   }
 
-  async login(administrator: Administrator) {
-    const payload = { username: administrator.username, sub: administrator.id };
+  async login(user: any) {
+    const payload = { username: user.username, sub: user.id };
+    console.log('jwt payload ================================>', payload)
     return {
       access_token: this.jwtService.sign(payload),
     };

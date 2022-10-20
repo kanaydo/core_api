@@ -15,4 +15,7 @@ export class Administrator {
 
   @CreateDateColumn({name: 'created_at'})
   createdAt:Date
+
+  @Column("simple-array", { name: 'role_list', nullable: true })
+  roleList: number[];
 }
