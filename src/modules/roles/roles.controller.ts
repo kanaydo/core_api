@@ -8,15 +8,16 @@ import { availableSections } from './data/sections/sections';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolePermissions } from './roles.permissions';
 import { RequirePermissions } from 'src/utils/require_permissions.decorator';
+import { RolesGuard } from 'src/guard/roles.guard';
 
 @Controller('roles')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard, RolesGuard)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
   @UseFilters(QueryFailedExceptionFilter)
-  // @RequirePermissions(RolePermissions.ROLE_CREATE)
+  @RequirePermissions(RolePermissions.ROLE_CREATE)
   create(@Body() createRoleDto: CreateRoleDto) {
     return this.rolesService.create(createRoleDto);
   }
@@ -27,29 +28,27 @@ export class RolesController {
   }
 
   @Get()
-  // @RequirePermissions(RolePermissions.ROLE_INDEX)
-  findAll(@Req() request: Request) {
-    // console.log(request);
-    console.log(request.user);
+  @RequirePermissions(RolePermissions.ROLE_INDEX)
+  findAll() {
     return this.rolesService.findAll();
   }
 
   @Get(':id')
   @UseFilters(QueryFailedExceptionFilter)
-  // @RequirePermissions(RolePermissions.ROLE_SHOW)
+  @RequirePermissions(RolePermissions.ROLE_SHOW)
   findOne(@Param('id') id: string) {
     return this.rolesService.findOne(+id);
   }
 
   @Patch(':id')
   @UseFilters(QueryFailedExceptionFilter)
-  // @RequirePermissions(RolePermissions.ROLE_UPDATE)
+  @RequirePermissions(RolePermissions.ROLE_UPDATE)
   update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
     return this.rolesService.update(+id, updateRoleDto);
   }
 
   @Delete(':id')
-  // @RequirePermissions(RolePermissions.ROLE_DESTROY)
+  @RequirePermissions(RolePermissions.ROLE_DESTROY)
   remove(@Param('id') id: string) {
     return this.rolesService.remove(+id);
   }
