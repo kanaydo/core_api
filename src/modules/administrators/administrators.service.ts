@@ -44,20 +44,23 @@ export class AdministratorsService {
   async getRoles(id: number) : Promise<string[]> {
     const admin = await this.administratorRepository.findOneBy({ id });
     if (!admin) return [];
+
+    const cachedSections = await this.cacheManager.get(`ADMIN_SECTION_${id}`);
+    if (cachedSections) {
+      console.log('using current cached');
+      return cachedSections as string[];
+    }
+
     const roles = await this.roleRepository.find({
       where: {
         id: In(admin.roleList) 
       }
     });
-    const currentCached = await this.cacheManager.get(`ADMIN_SECTION_${id}`);
-    console.log('current cache =====================> ', currentCached);
 
-    await this.cacheManager.set(`ADMIN_SECTION_${id}`, 'uniqueSection');
-    const cachedSections = await this.cacheManager.get(`ADMIN_SECTION_${id}`);
-    console.log('current cache =====================> ', cachedSections);
-    
+    console.log('create new cache');
     const sections = roles.map((r) => r.sections).flat();
     const uniqueSection = [...new Set(sections)];
+    await this.cacheManager.set(`ADMIN_SECTION_${id}`, uniqueSection);
     return uniqueSection;
   }
 }
