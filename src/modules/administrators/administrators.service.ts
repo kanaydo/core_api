@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { Cache } from 'cache-manager';
@@ -33,8 +33,13 @@ export class AdministratorsService {
     return this.administratorRepository.findOneBy({ id });
   }
 
-  update(id: number, updateAdministratorDto: UpdateAdministratorDto) {
-    return `This action updates a #${id} administrator`;
+  async update(id: number, updateAdministratorDto: UpdateAdministratorDto) {
+    const result = await this.administratorRepository.update(id, updateAdministratorDto);
+    if (result.affected) {
+      const updatedAdministrator = await this.administratorRepository.findOneBy({id: id});
+      return updatedAdministrator;
+    }
+    throw new HttpException('failed to update', HttpStatus.UNPROCESSABLE_ENTITY);
   }
 
   async remove(id: number): Promise<void> {
@@ -47,7 +52,6 @@ export class AdministratorsService {
 
     const cachedSections = await this.cacheManager.get(`ADMIN_SECTION_${id}`);
     if (cachedSections) {
-      console.log('using current cached');
       return cachedSections as string[];
     }
 
@@ -56,8 +60,6 @@ export class AdministratorsService {
         id: In(admin.roleList) 
       }
     });
-
-    console.log('create new cache');
     const sections = roles.map((r) => r.sections).flat();
     const uniqueSection = [...new Set(sections)];
     await this.cacheManager.set(`ADMIN_SECTION_${id}`, uniqueSection);
