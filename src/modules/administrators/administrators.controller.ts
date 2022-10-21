@@ -37,7 +37,6 @@ export class AdministratorsController {
   @UseFilters(QueryFailedExceptionFilter)
   @RequirePermissions(AdministratorPermissions.ADMINISTRATOR_UPDATE)
   update(@Param('id') id: string, @Body() updateAdministratorDto: UpdateAdministratorDto) {
-    console.log(updateAdministratorDto);
     return this.administratorsService.update(+id, updateAdministratorDto);
   }
 

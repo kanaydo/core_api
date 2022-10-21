@@ -1,3 +1,5 @@
+import { AdministratorPermissions } from "src/modules/administrators/administrators.permissions";
+
 export const administratorSections = {
   parent: {
     label: 'administrator_menu',
@@ -5,23 +7,23 @@ export const administratorSections = {
   },
   childs: [
     {
-      label: 'administrator_index',
+      label: AdministratorPermissions.ADMINISTRATOR_INDEX,
       description: 'Show All Administrator'
     },
     {
-      label: 'administrator_show',
+      label: AdministratorPermissions.ADMINISTRATOR_SHOW,
       description: 'Show Administrator Detail'
     },
     {
-      label: 'administrator_update',
-      description: 'Update Administrator Detail'
+      label: AdministratorPermissions.ADMINISTRATOR_UPDATE,
+      description: 'Update Administrator Update'
     },
     {
-      label: 'administrator_create',
+      label: AdministratorPermissions.ADMINISTRATOR_CREATE,
       description: 'Create New Administrator'
     },
     {
-      label: 'administrator_destroy',
+      label: AdministratorPermissions.ADMINISTRATOR_DESTROY,
       description: 'Destroy Administrator'
     } 
   ]

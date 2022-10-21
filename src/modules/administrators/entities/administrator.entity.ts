@@ -1,6 +1,6 @@
 
 
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { AfterUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({name: 'administrators'})
 export class Administrator {

@@ -1,6 +1,6 @@
 import { CACHE_MANAGER, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Admin, In, Repository } from 'typeorm';
 import { Cache } from 'cache-manager';
 import * as bcrypt from 'bcrypt';
 import { CreateAdministratorDto } from './dto/create-administrator.dto';
@@ -37,6 +37,7 @@ export class AdministratorsService {
     const result = await this.administratorRepository.update(id, updateAdministratorDto);
     if (result.affected) {
       const updatedAdministrator = await this.administratorRepository.findOneBy({id: id});
+      this.invalidateCachedSections(updatedAdministrator!);
       return updatedAdministrator;
     }
     throw new HttpException('failed to update', HttpStatus.UNPROCESSABLE_ENTITY);
@@ -47,16 +48,17 @@ export class AdministratorsService {
   }
 
   async getRoles(id: number) : Promise<string[]> {
+    const cachedSections = await this.cacheManager.get(`ADMIN_SECTION_${id}`);
+    if (cachedSections) return cachedSections as string[];
+
     const admin = await this.administratorRepository.findOneBy({ id });
     if (!admin) return [];
 
-    return this.getCachedSections(admin);
+    return this.invalidateCachedSections(admin);
   }
 
-  async getCachedSections(administrator: Administrator) : Promise<string[]> {
-    const cachedSections = await this.cacheManager.get(`ADMIN_SECTION_${administrator.id}`);
-    if (cachedSections) return cachedSections as string[];
-
+  async invalidateCachedSections(administrator: Administrator) : Promise<string[]> {
+    console.log('===============================> invalidating cached section')
     const roles = await this.roleRepository.find({
       where: {
         id: In(administrator.roleList) 
