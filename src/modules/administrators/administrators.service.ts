@@ -50,21 +50,22 @@ export class AdministratorsService {
     const admin = await this.administratorRepository.findOneBy({ id });
     if (!admin) return [];
 
-    const cachedSections = await this.cacheManager.get(`ADMIN_SECTION_${id}`);
-    if (cachedSections) {
-      // console.log('cached sections', cachedSections);
-      return cachedSections as string[];
-    }
+    return this.getCachedSections(admin);
+  }
+
+  async getCachedSections(administrator: Administrator) : Promise<string[]> {
+    const cachedSections = await this.cacheManager.get(`ADMIN_SECTION_${administrator.id}`);
+    if (cachedSections) return cachedSections as string[];
 
     const roles = await this.roleRepository.find({
       where: {
-        id: In(admin.roleList) 
+        id: In(administrator.roleList) 
       }
     });
+
     const sections = roles.map((r) => r.sections).flat();
     const uniqueSection = [...new Set(sections)];
-    await this.cacheManager.set(`ADMIN_SECTION_${id}`, uniqueSection);
-    // console.log('sections', uniqueSection);
+    await this.cacheManager.set(`ADMIN_SECTION_${administrator.id}`, uniqueSection);
     return uniqueSection;
   }
 }

@@ -3,6 +3,7 @@ import { Request } from 'express';
 import { AuthService } from './modules/auth/auth.service';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { LocalAuthGuard } from './modules/auth/guards/local-auth.guard';
+import { Public } from './utils/public.decorator';
 
 @Controller()
 export class AppController {
@@ -10,8 +11,9 @@ export class AppController {
     private readonly authService: AuthService
   ) {}
 
-  @UseGuards(LocalAuthGuard)
+  @Public()
   @Post('auth/login')
+  @UseGuards(LocalAuthGuard)
   async login(@Req() req: Request) {
     console.log('user =======================> ', req.user);
     return this.authService.login(req.user);
