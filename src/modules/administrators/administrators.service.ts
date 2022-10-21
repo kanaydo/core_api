@@ -34,13 +34,11 @@ export class AdministratorsService {
   }
 
   async update(id: number, updateAdministratorDto: UpdateAdministratorDto) {
-    const result = await this.administratorRepository.update(id, updateAdministratorDto);
-    if (result.affected) {
-      const updatedAdministrator = await this.administratorRepository.findOneBy({id: id});
-      this.invalidateCachedSections(updatedAdministrator!);
-      return updatedAdministrator;
-    }
-    throw new HttpException('failed to update', HttpStatus.UNPROCESSABLE_ENTITY);
+    const administrator = await this.administratorRepository.findOneBy({id: id});
+    const updateAdministratorParams = { ...administrator, ...updateAdministratorDto };
+    const result = await this.administratorRepository.save(updateAdministratorParams);
+    this.invalidateCachedSections(result);
+    return result;
   }
 
   async remove(id: number): Promise<void> {

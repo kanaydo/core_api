@@ -1,6 +1,6 @@
 
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { AdministratorSubscriber } from 'src/modules/administrators/entities/administrator.subscriber';
+// import { AdministratorSubscriber } from 'src/modules/administrators/entities/administrator.subscriber';
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   useFactory: async (): Promise<TypeOrmModuleOptions> => {
@@ -17,7 +17,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
         charset: 'utf8mb4_unicode_ci',
       },
       subscribers: [
-        AdministratorSubscriber
+        // AdministratorSubscriber
       ],
       synchronize: false,
       logging: true,
