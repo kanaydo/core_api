@@ -8,6 +8,7 @@ import { UpdateAdministratorDto } from './dto/update-administrator.dto';
 import { AdministratorEntity } from './entities/administrator.entity';
 import { RoleEntity } from '../roles/entities/role.entity';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { CorePagingOrder } from './entities/core_paging_order.interface';
 
 @Injectable()
 export class AdministratorsService {
@@ -71,7 +72,12 @@ export class AdministratorsService {
     return uniqueSection;
   }
 
-  async paginate(options: IPaginationOptions): Promise<Pagination<AdministratorEntity>> {
-    return paginate<AdministratorEntity>(this.administratorRepository, options);
+  async paginate(options: IPaginationOptions, order: CorePagingOrder): Promise<Pagination<AdministratorEntity>> {
+    const queryBuilder = this.administratorRepository.createQueryBuilder('admin');
+    if (order.order && order.field) {
+      const orderTerm = order.order == 'ascend' ? 'ASC' : 'DESC';
+      queryBuilder.orderBy(`admin.${order.field}`, orderTerm);
+    }
+    return paginate<AdministratorEntity>(queryBuilder, options);
   }
 }

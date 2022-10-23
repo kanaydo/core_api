@@ -1,4 +1,4 @@
-import { CacheModule, Module } from '@nestjs/common';
+import { CacheModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AdministratorsModule } from './modules/administrators/administrators.module';
@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { RolesGuard } from './guard/roles.guard';
+import { AppLoggerMiddleware } from './logger.middleware';
 
 @Module({
   imports: [
@@ -40,6 +41,9 @@ import { RolesGuard } from './guard/roles.guard';
     CacheModule
   ]
 })
-export class AppModule {
+export class AppModule implements NestModule {
   constructor(private dataSource: DataSource) {}
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AppLoggerMiddleware).forRoutes('*');
+  }
 }
