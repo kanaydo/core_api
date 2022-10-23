@@ -1,7 +1,7 @@
 import { PartialType } from "@nestjs/mapped-types"
-import { Administrator } from "../entities/administrator.entity"
+import { AdministratorEntity } from "../entities/administrator.entity"
 
-export class CreateAdministratorDto extends PartialType(Administrator) {
+export class CreateAdministratorDto extends PartialType(AdministratorEntity) {
   username: string
   password: string
   roleList: number[]

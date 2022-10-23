@@ -2,15 +2,15 @@ import { CacheModule, Module } from '@nestjs/common';
 import { AdministratorsService } from './administrators.service';
 import { AdministratorsController } from './administrators.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Administrator } from './entities/administrator.entity';
+import { AdministratorEntity } from './entities/administrator.entity';
 import { Repository } from 'typeorm';
-import { Role } from '../roles/entities/role.entity';
+import { RoleEntity } from '../roles/entities/role.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      Administrator,
-      Role
+      AdministratorEntity,
+      RoleEntity
     ]),
   ],
   controllers: [AdministratorsController],

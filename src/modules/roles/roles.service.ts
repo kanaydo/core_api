@@ -4,30 +4,30 @@ import { validate } from 'class-validator';
 import { QueryFailedError, Repository } from 'typeorm';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { Role } from './entities/role.entity';
+import { RoleEntity } from './entities/role.entity';
 
 @Injectable()
 export class RolesService {
   constructor(
-    @InjectRepository(Role)
-    private roleRepository: Repository<Role>
+    @InjectRepository(RoleEntity)
+    private roleRepository: Repository<RoleEntity>
   ) {}
 
-  async create(createRoleDto: CreateRoleDto): Promise<Role> {
+  async create(createRoleDto: CreateRoleDto): Promise<RoleEntity> {
     const newRole = this.roleRepository.create(createRoleDto);
     await this.roleRepository.save(newRole);
     return newRole;
   }
 
-  findAll() : Promise<Role[]> {
+  findAll() : Promise<RoleEntity[]> {
     return this.roleRepository.find();
   }
 
-  async findOne(id: number) : Promise<Role | null> {
+  async findOne(id: number) : Promise<RoleEntity | null> {
     return await this.roleRepository.findOneByOrFail({id: id});
   }
 
-  async update(id: number, updateRoleDto: UpdateRoleDto) : Promise<Role | null> {
+  async update(id: number, updateRoleDto: UpdateRoleDto) : Promise<RoleEntity | null> {
     const result = await this.roleRepository.update(id, updateRoleDto);
     if (result.affected) {
       const updatedRole = await this.roleRepository.findOneBy({id: id});

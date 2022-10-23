@@ -4,7 +4,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeor
 import { AdministratorSerializer } from './administrator.serializer';
 
 @Entity({name: 'administrators'})
-export class Administrator {
+export class AdministratorEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

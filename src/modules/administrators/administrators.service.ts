@@ -5,18 +5,19 @@ import { Cache } from 'cache-manager';
 import * as bcrypt from 'bcrypt';
 import { CreateAdministratorDto } from './dto/create-administrator.dto';
 import { UpdateAdministratorDto } from './dto/update-administrator.dto';
-import { Administrator } from './entities/administrator.entity';
-import { Role } from '../roles/entities/role.entity';
+import { AdministratorEntity } from './entities/administrator.entity';
+import { RoleEntity } from '../roles/entities/role.entity';
+import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class AdministratorsService {
   constructor(
-    @InjectRepository(Administrator) private administratorRepository: Repository<Administrator>,
-    @InjectRepository(Role) private roleRepository: Repository<Role>,
+    @InjectRepository(AdministratorEntity) private administratorRepository: Repository<AdministratorEntity>,
+    @InjectRepository(RoleEntity) private roleRepository: Repository<RoleEntity>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
-  async create(createAdministratorDto: CreateAdministratorDto): Promise<Administrator> {
+  async create(createAdministratorDto: CreateAdministratorDto): Promise<AdministratorEntity> {
     const hashedPassword = await bcrypt.hash(createAdministratorDto.password, 10);
     createAdministratorDto.passwordDigest = hashedPassword;
     const newTodo = this.administratorRepository.create(createAdministratorDto);
@@ -25,20 +26,20 @@ export class AdministratorsService {
     return newTodo;
   }
 
-  findAll(): Promise<Administrator[]> {
+  findAll(): Promise<AdministratorEntity[]> {
     return this.administratorRepository.find();
   }
 
-  findOne(id: number): Promise<Administrator | null> {
+  findOne(id: number): Promise<AdministratorEntity | null> {
     return this.administratorRepository.findOneBy({ id });
   }
 
-  async update(id: number, updateAdministratorDto: UpdateAdministratorDto) : Promise<Administrator> {
+  async update(id: number, updateAdministratorDto: UpdateAdministratorDto) : Promise<AdministratorEntity> {
     const current = await this.administratorRepository.findOneBy({id: id});
     const updateAdministratorParams = { ...current, ...updateAdministratorDto };
     const result = await this.administratorRepository.save(updateAdministratorParams);
     this.invalidateCachedSections(result);
-    const updatedAdmin = result as Administrator;
+    const updatedAdmin = result as AdministratorEntity;
     return updatedAdmin;
   }
 
@@ -56,7 +57,7 @@ export class AdministratorsService {
     return this.invalidateCachedSections(admin);
   }
 
-  async invalidateCachedSections(administrator: Administrator) : Promise<string[]> {
+  async invalidateCachedSections(administrator: AdministratorEntity) : Promise<string[]> {
     console.log('===============================> invalidating cached section')
     const roles = await this.roleRepository.find({
       where: {
@@ -68,5 +69,9 @@ export class AdministratorsService {
     const uniqueSection = [...new Set(sections)];
     await this.cacheManager.set(`ADMIN_SECTION_${administrator.id}`, uniqueSection);
     return uniqueSection;
+  }
+
+  async paginate(options: IPaginationOptions): Promise<Pagination<AdministratorEntity>> {
+    return paginate<AdministratorEntity>(this.administratorRepository, options);
   }
 }
