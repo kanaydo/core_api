@@ -77,6 +77,8 @@ export class AdministratorsService {
     if (order.order && order.field) {
       const orderTerm = order.order == 'ascend' ? 'ASC' : 'DESC';
       queryBuilder.orderBy(`admin.${order.field}`, orderTerm);
+    } else {
+      queryBuilder.orderBy(`admin.id`, 'ASC');
     }
     return paginate<AdministratorEntity>(queryBuilder, options);
   }

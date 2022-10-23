@@ -33,5 +33,5 @@ export class AdministratorEntity {
     enum: AdministratorStatus,
     default: AdministratorStatus.ACTIVE,
   })
-  role: AdministratorStatus
+  status: AdministratorStatus
 }
