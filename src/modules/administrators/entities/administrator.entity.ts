@@ -1,6 +1,7 @@
-
-
-import { AfterUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Exclude, Expose, Transform } from 'class-transformer';
+import { format } from 'date-fns'
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { AdministratorSerializer } from './administrator.serializer';
 
 @Entity({name: 'administrators'})
 export class Administrator {
@@ -8,14 +9,17 @@ export class Administrator {
   id: number;
 
   @Column({type: 'text', unique: true, name: 'username'})
-  username:string
+  username: string
 
+  @Exclude()
   @Column({type: 'text', name: 'password_digest'})
-  passwordDigest:string
+  passwordDigest: string
 
+  @Transform(({ value }) => format(value, 'dd/MM/yyyy HH:MM:SS'))
   @CreateDateColumn({name: 'created_at'})
-  createdAt:Date
+  createdAt: Date
 
+  @Expose({groups: [AdministratorSerializer.DETAIL]})
   @Column("simple-array", { name: 'role_list', nullable: true })
   roleList: number[];
 }

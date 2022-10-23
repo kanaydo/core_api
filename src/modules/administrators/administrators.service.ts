@@ -33,12 +33,13 @@ export class AdministratorsService {
     return this.administratorRepository.findOneBy({ id });
   }
 
-  async update(id: number, updateAdministratorDto: UpdateAdministratorDto) {
-    const administrator = await this.administratorRepository.findOneBy({id: id});
-    const updateAdministratorParams = { ...administrator, ...updateAdministratorDto };
+  async update(id: number, updateAdministratorDto: UpdateAdministratorDto) : Promise<Administrator> {
+    const current = await this.administratorRepository.findOneBy({id: id});
+    const updateAdministratorParams = { ...current, ...updateAdministratorDto };
     const result = await this.administratorRepository.save(updateAdministratorParams);
     this.invalidateCachedSections(result);
-    return result;
+    const updatedAdmin = result as Administrator;
+    return updatedAdmin;
   }
 
   async remove(id: number): Promise<void> {
