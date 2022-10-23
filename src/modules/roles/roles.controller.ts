@@ -40,7 +40,7 @@ export class RolesController {
   @UseFilters(QueryFailedExceptionFilter)
   @RequirePermissions(RolePermissions.ROLE_UPDATE)
   update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    console.log(updateRoleDto);
+    // console.log(updateRoleDto);
     return this.rolesService.update(+id, updateRoleDto);
   }
 

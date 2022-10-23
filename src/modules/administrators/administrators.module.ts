@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdministratorEntity } from './entities/administrator.entity';
 import { Repository } from 'typeorm';
 import { RoleEntity } from '../roles/entities/role.entity';
+import { AdministratorsFilterService } from './administrators.filter.service';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RoleEntity } from '../roles/entities/role.entity';
   controllers: [AdministratorsController],
   providers: [
     AdministratorsService,
+    AdministratorsFilterService
   ],
   exports: [
     AdministratorsService,

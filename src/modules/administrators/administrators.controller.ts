@@ -6,7 +6,6 @@ import { AdministratorsService } from './administrators.service';
 import { CreateAdministratorDto } from './dto/create-administrator.dto';
 import { UpdateAdministratorDto } from './dto/update-administrator.dto';
 import { AdministratorSerializer } from './entities/administrator.serializer';
-import { CorePagingOrder } from './entities/core_paging_order.interface';
 
 @Controller('administrators')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -29,16 +28,18 @@ export class AdministratorsController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
     @Query('results', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
     @Query('order') order: string,
-    @Query('field') field: string
+    @Query('field') field: string,
+    @Query('filters') filters: any
   ) {
-    console.log(order, field);
+    // console.log(order, field);
     limit = limit > 100 ? 100 : limit;
     return this.administratorsService.paginate({
       page,
       limit
     }, {
       order: order,
-      field: field
+      field: field,
+      filters: filters
     });
   }
 

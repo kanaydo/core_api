@@ -1,4 +1,5 @@
 export interface CorePagingOrder {
   order?: string,
-  field?: string
+  field?: string,
+  filters?: any
 }

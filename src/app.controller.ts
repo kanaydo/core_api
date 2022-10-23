@@ -22,7 +22,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getHello(@Req() request: Request) {
-    console.log(request);
+    // console.log(request);
     return request.user;
   }
 }

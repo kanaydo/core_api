@@ -9,13 +9,15 @@ import { AdministratorEntity } from './entities/administrator.entity';
 import { RoleEntity } from '../roles/entities/role.entity';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { CorePagingOrder } from './entities/core_paging_order.interface';
+import { AdministratorsFilterService } from './administrators.filter.service';
 
 @Injectable()
 export class AdministratorsService {
   constructor(
     @InjectRepository(AdministratorEntity) private administratorRepository: Repository<AdministratorEntity>,
     @InjectRepository(RoleEntity) private roleRepository: Repository<RoleEntity>,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly filterService: AdministratorsFilterService
   ) {}
 
   async create(createAdministratorDto: CreateAdministratorDto): Promise<AdministratorEntity> {
@@ -80,6 +82,10 @@ export class AdministratorsService {
     } else {
       queryBuilder.orderBy(`admin.id`, 'ASC');
     }
+    
+    const filterQuery = this.filterService.parse(order.filters);
+
+    queryBuilder.where(filterQuery);
     return paginate<AdministratorEntity>(queryBuilder, options);
   }
 }
