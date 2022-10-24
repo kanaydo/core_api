@@ -16,6 +16,9 @@ export class RoleEntity {
   @Column({ type: 'text', unique: true })
   name:string
 
+  @Column({ type: 'text', nullable: true })
+  description?:string
+
   @Transform(({ value }) => format(value, 'dd/MM/yyyy HH:MM:SS'))
   @CreateDateColumn({ name: 'created_at' })
   createdAt:Date

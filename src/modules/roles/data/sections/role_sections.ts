@@ -1,30 +1,28 @@
 import { RolePermissions } from "../../roles.permissions";
 
 export const roleSections = {
-  parent: {
-    label: 'role_menu',
-    description: 'Role Menu'
-  },
-  childs: [
+  key: 'role_menu',
+  title: 'Role Menu',
+  children: [
     {
-      label: RolePermissions.ROLE_INDEX,
-      description: 'Show All Role'
+      key: RolePermissions.ROLE_INDEX,
+      title: 'Show All Role'
     },
     {
-      label: RolePermissions.ROLE_CREATE,
-      description: 'Create New Role'
+      key: RolePermissions.ROLE_CREATE,
+      title: 'Create New Role'
     },
     {
-      label: RolePermissions.ROLE_SHOW,
-      description: 'Show Role Detail'
+      key: RolePermissions.ROLE_SHOW,
+      title: 'Show Role Detail'
     },
     {
-      label: RolePermissions.ROLE_UPDATE,
-      description: 'Update Role Detail'
+      key: RolePermissions.ROLE_UPDATE,
+      title: 'Update Role Detail'
     },
     {
-      label: RolePermissions.ROLE_DESTROY,
-      description: 'Destroy Role'
+      key: RolePermissions.ROLE_DESTROY,
+      title: 'Destroy Role'
     } 
   ]
 }

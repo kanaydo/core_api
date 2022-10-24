@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseFilters, UseGuards, Req, UseInterceptors, ClassSerializerInterceptor, SerializeOptions } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseFilters, UseGuards, Req, UseInterceptors, ClassSerializerInterceptor, SerializeOptions, DefaultValuePipe, ParseIntPipe, Query } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
@@ -27,8 +27,22 @@ export class RolesController {
 
   @Get()
   @RequirePermissions(RolePermissions.ROLE_INDEX)
-  findAll() {
-    return this.rolesService.findAll();
+  findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('results', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+    @Query('order') order: string,
+    @Query('field') field: string,
+    @Query('filters') filters: any
+  ) {
+    limit = limit > 100 ? 100 : limit;
+    return this.rolesService.paginate({
+      page,
+      limit
+    }, {
+      order: order,
+      field: field,
+      filters: filters
+    });
   }
 
   @Get(':id')
