@@ -16,7 +16,7 @@ export class AdministratorsController {
 
   @Post()
   @UseFilters(QueryFailedExceptionFilter)
-  // @RequirePermissions(AdministratorPermissions.ADMINISTRATOR_CREATE)
+  @RequirePermissions(AdministratorPermissions.ADMINISTRATOR_CREATE)
   create(@Body() createAdministratorDto: CreateAdministratorDto) {
     return this.administratorsService.create(createAdministratorDto);
   }
@@ -31,7 +31,6 @@ export class AdministratorsController {
     @Query('field') field: string,
     @Query('filters') filters: any
   ) {
-    // console.log(order, field);
     limit = limit > 100 ? 100 : limit;
     return this.administratorsService.paginate({
       page,
