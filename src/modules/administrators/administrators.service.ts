@@ -76,15 +76,18 @@ export class AdministratorsService {
 
   async paginate(options: IPaginationOptions, order: CorePagingOrder): Promise<Pagination<AdministratorEntity>> {
     const queryBuilder = this.administratorRepository.createQueryBuilder('admin');
+
+    console.log('params ==================>', order);
+
     if (order.order && order.field) {
       const orderTerm = order.order == 'ascend' ? 'ASC' : 'DESC';
       queryBuilder.orderBy(`admin.${order.field}`, orderTerm);
     } else {
       queryBuilder.orderBy(`admin.id`, 'ASC');
     }
-    
-    const filterQuery = this.filterService.parse(order.filters);
 
+    const filterQuery = this.filterService.parse(order.filters);
+    console.log('query ===============================>', filterQuery);
     queryBuilder.where(filterQuery);
     return paginate<AdministratorEntity>(queryBuilder, options);
   }
