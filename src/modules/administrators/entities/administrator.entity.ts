@@ -10,8 +10,8 @@ export enum AdministratorStatus {
 
 @Entity({name: 'administrators'})
 export class AdministratorEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
   @Column({type: 'text', unique: true, name: 'username'})
   username: string
@@ -26,7 +26,7 @@ export class AdministratorEntity {
 
   @Expose({groups: [AdministratorSerializer.DETAIL]})
   @Column("simple-array", { name: 'role_list', nullable: true })
-  roleList: number[];
+  roleList: string[];
 
   @Column({
     type: 'enum',

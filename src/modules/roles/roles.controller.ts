@@ -50,7 +50,7 @@ export class RolesController {
   @SerializeOptions({ groups: [RoleSerializer.DETAIL] })
   @RequirePermissions(RolePermissions.ROLE_SHOW)
   findOne(@Param('id') id: string) {
-    return this.rolesService.findOne(+id);
+    return this.rolesService.findOne(id);
   }
 
   @Patch(':id')
@@ -58,12 +58,12 @@ export class RolesController {
   @RequirePermissions(RolePermissions.ROLE_UPDATE)
   update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
     // console.log(updateRoleDto);
-    return this.rolesService.update(+id, updateRoleDto);
+    return this.rolesService.update(id, updateRoleDto);
   }
 
   @Delete(':id')
   @RequirePermissions(RolePermissions.ROLE_DESTROY)
   remove(@Param('id') id: string) {
-    return this.rolesService.remove(+id);
+    return this.rolesService.remove(id);
   }
 }

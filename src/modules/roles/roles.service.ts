@@ -27,11 +27,11 @@ export class RolesService {
     return this.roleRepository.find();
   }
 
-  async findOne(id: number) : Promise<RoleEntity | null> {
+  async findOne(id: string) : Promise<RoleEntity | null> {
     return await this.roleRepository.findOneByOrFail({id: id});
   }
 
-  async update(id: number, updateRoleDto: UpdateRoleDto) : Promise<RoleEntity | null> {
+  async update(id: string, updateRoleDto: UpdateRoleDto) : Promise<RoleEntity | null> {
     const result = await this.roleRepository.update(id, updateRoleDto);
     if (result.affected) {
       const updatedRole = await this.roleRepository.findOneBy({id: id});
@@ -40,7 +40,7 @@ export class RolesService {
     throw new HttpException('failed to update', HttpStatus.UNPROCESSABLE_ENTITY);
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const destroyRole = await this.roleRepository.delete(id);
     if (destroyRole.affected) {
       return {

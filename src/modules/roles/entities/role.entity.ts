@@ -10,8 +10,8 @@ export enum RoleStatus {
 
 @Entity({name: 'roles'})
 export class RoleEntity {
-  @PrimaryGeneratedColumn()
-  id:number;
+  @PrimaryGeneratedColumn("uuid")
+  id:string;
 
   @Column({ type: 'text', unique: true })
   name:string

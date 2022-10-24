@@ -33,11 +33,11 @@ export class AdministratorsService {
     return this.administratorRepository.find();
   }
 
-  findOne(id: number): Promise<AdministratorEntity | null> {
+  findOne(id: string): Promise<AdministratorEntity | null> {
     return this.administratorRepository.findOneBy({ id });
   }
 
-  async update(id: number, updateAdministratorDto: UpdateAdministratorDto) : Promise<AdministratorEntity> {
+  async update(id: string, updateAdministratorDto: UpdateAdministratorDto) : Promise<AdministratorEntity> {
     const current = await this.administratorRepository.findOneBy({id: id});
     const updateAdministratorParams = { ...current, ...updateAdministratorDto };
     const result = await this.administratorRepository.save(updateAdministratorParams);
@@ -46,11 +46,11 @@ export class AdministratorsService {
     return updatedAdmin;
   }
 
-  async remove(id: number): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.administratorRepository.delete(id);
   }
 
-  async getRoles(id: number) : Promise<string[]> {
+  async getRoles(id: string) : Promise<string[]> {
     const cachedSections = await this.cacheManager.get(`ADMIN_SECTION_${id}`);
     if (cachedSections) return cachedSections as string[];
 

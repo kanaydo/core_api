@@ -16,7 +16,7 @@ export class AdministratorsController {
 
   @Post()
   @UseFilters(QueryFailedExceptionFilter)
-  @RequirePermissions(AdministratorPermissions.ADMINISTRATOR_CREATE)
+  // @RequirePermissions(AdministratorPermissions.ADMINISTRATOR_CREATE)
   create(@Body() createAdministratorDto: CreateAdministratorDto) {
     return this.administratorsService.create(createAdministratorDto);
   }
@@ -48,7 +48,7 @@ export class AdministratorsController {
   @SerializeOptions({ groups: [AdministratorSerializer.DETAIL] })
   @RequirePermissions(AdministratorPermissions.ADMINISTRATOR_SHOW)
   findOne(@Param('id') id: string) {
-    return this.administratorsService.findOne(+id);
+    return this.administratorsService.findOne(id);
   }
 
   @Patch(':id')
@@ -56,14 +56,14 @@ export class AdministratorsController {
   @SerializeOptions({ groups: [AdministratorSerializer.DETAIL] })
   @RequirePermissions(AdministratorPermissions.ADMINISTRATOR_UPDATE)
   update(@Param('id') id: string, @Body() updateAdministratorDto: UpdateAdministratorDto) {
-    return this.administratorsService.update(+id, updateAdministratorDto);
+    return this.administratorsService.update(id, updateAdministratorDto);
   }
 
   @Delete(':id')
   @UseFilters(QueryFailedExceptionFilter)
   @RequirePermissions(AdministratorPermissions.ADMINISTRATOR_DESTROY)
   remove(@Param('id') id: string) {
-    return this.administratorsService.remove(+id);
+    return this.administratorsService.remove(id);
   }
 }
 
