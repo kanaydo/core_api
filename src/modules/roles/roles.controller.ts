@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseFilters, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseFilters, UseGuards, Req, UseInterceptors, ClassSerializerInterceptor, SerializeOptions } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
@@ -6,8 +6,10 @@ import { QueryFailedExceptionFilter } from 'src/utils/query_failed_exception.fil
 import { availableSections } from './data/sections/sections';
 import { RolePermissions } from './roles.permissions';
 import { RequirePermissions } from 'src/utils/require_permissions.decorator';
+import { RoleSerializer } from './entities/role.serializer';
 
 @Controller('roles')
+@UseInterceptors(ClassSerializerInterceptor)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
@@ -31,6 +33,7 @@ export class RolesController {
 
   @Get(':id')
   @UseFilters(QueryFailedExceptionFilter)
+  @SerializeOptions({ groups: [RoleSerializer.DETAIL] })
   @RequirePermissions(RolePermissions.ROLE_SHOW)
   findOne(@Param('id') id: string) {
     return this.rolesService.findOne(+id);
