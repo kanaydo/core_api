@@ -3,6 +3,11 @@ import { format } from "date-fns";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { RoleSerializer } from "./role.serializer";
 
+export enum RoleStatus {
+  ACTIVE = "active",
+  INACTIVE = "inactive"
+}
+
 @Entity({name: 'roles'})
 export class RoleEntity {
   @PrimaryGeneratedColumn()
@@ -18,4 +23,11 @@ export class RoleEntity {
   @Expose({groups: [RoleSerializer.DETAIL]})
   @Column("simple-array", { name: 'sections' })
   sections: string[];
+
+  @Column({
+    type: 'enum',
+    enum: RoleStatus,
+    default: RoleStatus.ACTIVE,
+  })
+  status: RoleStatus
 }
