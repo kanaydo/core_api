@@ -13,6 +13,10 @@ import { RoleFilter } from './roles.filter';
   providers: [
     RolesService,
     RoleFilter
+  ],
+  exports: [
+    RolesService,
+    RoleFilter
   ]
 })
 export class RolesModule {}

@@ -6,6 +6,9 @@ import { AdministratorEntity } from './entities/administrator.entity';
 import { Repository } from 'typeorm';
 import { RoleEntity } from '../roles/entities/role.entity';
 import { AdministratorsFilterService } from './administrators.filter.service';
+import { RolesService } from '../roles/roles.service';
+import { RoleFilter } from '../roles/roles.filter';
+import { RolesModule } from '../roles/roles.module';
 
 @Module({
   imports: [
@@ -13,6 +16,7 @@ import { AdministratorsFilterService } from './administrators.filter.service';
       AdministratorEntity,
       RoleEntity
     ]),
+    RolesModule
   ],
   controllers: [AdministratorsController],
   providers: [

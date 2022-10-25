@@ -14,7 +14,7 @@ export class ApiController {
   ) {}
 
   @Public()
-  @Post('auth/login')
+  @Post('auth')
   @UseGuards(LocalAuthGuard)
   async login(@Req() req: Request) {
     return this.authService.login(req.user!);
