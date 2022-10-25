@@ -1,4 +1,4 @@
-import { AdministratorPermissions } from "src/modules/administrators/administrators.permissions";
+import { AdministratorPermissions } from "src/modules/api/administrators/administrators.permissions";
 
 export const administratorSections = {
   key: 'administrator_menu',

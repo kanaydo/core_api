@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, Inject } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AdministratorsService } from 'src/modules/administrators/administrators.service';
+import { AdministratorsService } from 'src/modules/api/administrators/administrators.service';
 import { ROLES_KEY } from 'src/utils/require_permissions.decorator';
 
 @Injectable()
