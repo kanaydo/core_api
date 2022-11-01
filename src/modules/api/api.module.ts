@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesModule } from './roles/roles.module';
 import { WorkUnitModule } from './work_unit/work_unit.module';
+import { CustomersModule } from './customers/customers.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { WorkUnitModule } from './work_unit/work_unit.module';
     RolesModule,
     AuthModule,
     WorkUnitModule,
+    CustomersModule,
     RouterModule.register([
       {
         path: 'api',
@@ -26,8 +28,13 @@ import { WorkUnitModule } from './work_unit/work_unit.module';
       {
         path: 'api',
         module: WorkUnitModule
+      },
+      {
+        path: 'api',
+        module: CustomersModule
       }
     ]),
+    
   ],
   controllers: [
     ApiController
