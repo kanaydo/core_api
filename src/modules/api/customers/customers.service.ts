@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { CorePagingOrder } from '../administrators/entities/core_paging_order.interface';
+import { CustomerFilter } from './customers.filter';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CustomerEntity } from './entities/customer.entity';
@@ -10,7 +11,8 @@ import { CustomerEntity } from './entities/customer.entity';
 @Injectable()
 export class CustomersService {
   constructor(
-    @InjectRepository(CustomerEntity) private customerRepo: Repository<CustomerEntity>
+    @InjectRepository(CustomerEntity) private customerRepo: Repository<CustomerEntity>,
+    private readonly filterService: CustomerFilter
   ) { }
 
   async create(createCustomerDto: CreateCustomerDto) : Promise<CustomerEntity> {
@@ -48,9 +50,9 @@ export class CustomersService {
       queryBuilder.orderBy(`cust.id`, 'ASC');
     }
 
-    // const filterQuery = this.filterService.parse(order.filters);
-    // console.log('query ===============================>', filterQuery);
-    // queryBuilder.where(filterQuery);
+    const filterQuery = this.filterService.parse(order.filters);
+    console.log('query ===============================>', filterQuery);
+    queryBuilder.where(filterQuery);
     return paginate<CustomerEntity>(queryBuilder, options);
   }
 }
