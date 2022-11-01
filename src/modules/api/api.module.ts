@@ -6,13 +6,14 @@ import { ApiController } from './api.controller';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesModule } from './roles/roles.module';
-import { RolesService } from './roles/roles.service';
+import { WorkUnitModule } from './work_unit/work_unit.module';
 
 @Module({
   imports: [
     AdministratorsModule,
     RolesModule,
     AuthModule,
+    WorkUnitModule,
     RouterModule.register([
       {
         path: 'api',
@@ -21,6 +22,10 @@ import { RolesService } from './roles/roles.service';
       {
         path: 'api',
         module: AdministratorsModule
+      },
+      {
+        path: 'api',
+        module: WorkUnitModule
       }
     ]),
   ],

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseFilters, UseInterceptors, ClassSerializerInterceptor, SerializeOptions, Query, DefaultValuePipe, ParseIntPipe } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, SerializeOptions, UseFilters, UseInterceptors } from '@nestjs/common';
 import { QueryFailedExceptionFilter } from 'src/utils/query_failed_exception.filter';
 import { RequirePermissions } from 'src/utils/require_permissions.decorator';
 import { RolesService } from '../roles/roles.service';
@@ -14,7 +14,9 @@ export class AdministratorsController {
   constructor(
     private readonly administratorsService: AdministratorsService,
     private readonly roleService: RolesService
-  ) {}
+  ) {
+
+  }
 
   @Post()
   @UseFilters(QueryFailedExceptionFilter)

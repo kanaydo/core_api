@@ -39,6 +39,10 @@ export class AdministratorsService {
 
   async update(id: string, updateAdministratorDto: UpdateAdministratorDto) : Promise<AdministratorEntity> {
     const current = await this.administratorRepository.findOneBy({id: id});
+    if (updateAdministratorDto.password) {
+      const hashedPassword = await bcrypt.hash(updateAdministratorDto.password, 10);
+      updateAdministratorDto.passwordDigest = hashedPassword;
+    }
     const updateAdministratorParams = { ...current, ...updateAdministratorDto };
     const result = await this.administratorRepository.save(updateAdministratorParams);
     this.invalidateCachedSections(result);
