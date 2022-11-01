@@ -3,6 +3,10 @@ import CoreBaseEntity from "src/utils/core_base.entity";
 import { Column, Entity } from "typeorm";
 import { CustomerSerializer } from "./customer.serializer";
 
+export enum CustomerStatus {
+  ACTIVE = "active",
+  INACTIVE = "inactive"
+}
 
 @Entity({name: 'customers'})
 export class CustomerEntity extends CoreBaseEntity {
@@ -20,4 +24,11 @@ export class CustomerEntity extends CoreBaseEntity {
 
   @Expose({groups: [CustomerSerializer.DETAIL]})
   createdAt: Date
+
+  @Column({
+    type: 'enum',
+    enum: CustomerStatus,
+    default: CustomerStatus.ACTIVE,
+  })
+  status: CustomerStatus
 }
