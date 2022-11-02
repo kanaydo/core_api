@@ -17,7 +17,11 @@ export class CustomerFilter {
       }
 
       if (key === 'firstName') {
-        innerQuery = `cust.first_name LIKE \'%${value}%\' OR cust.last_name LIKE \'%${value}%\'`;
+        innerQuery = `LOWER(cust.first_name) LIKE LOWER(\'%${value}%\') OR LOWER(cust.last_name) LIKE LOWER(\'%${value}%\')`;
+      }
+
+      if (key == 'email') {
+        innerQuery = `cust.email LIKE \'%${value}%\'`;
       }
 
       if (key === 'createdAt') {
