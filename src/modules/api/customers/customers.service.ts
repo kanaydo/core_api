@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { CorePagingOrder } from '../administrators/entities/core_paging_order.interface';
-import { CustomerFilter } from './customers.datatable';
+import { CustomerDatatable } from './customers.datatable';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CustomerEntity } from './entities/customer.entity';
@@ -12,7 +12,7 @@ import { CustomerEntity } from './entities/customer.entity';
 export class CustomersService {
   constructor(
     @InjectRepository(CustomerEntity) private customerRepo: Repository<CustomerEntity>,
-    private readonly filterService: CustomerFilter
+    private readonly filterService: CustomerDatatable
   ) { }
 
   async create(createCustomerDto: CreateCustomerDto) : Promise<CustomerEntity> {

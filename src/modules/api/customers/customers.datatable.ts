@@ -3,7 +3,7 @@ import BaseDatatable from "src/utils/bases/datatable.base";
 import { DatatableCondition } from "src/utils/enums/datatable.enum";
 
 @Injectable()
-export class CustomerFilter extends BaseDatatable {
+export class CustomerDatatable extends BaseDatatable {
   constructor() { 
     super({
       status:  DatatableCondition.ANY,
