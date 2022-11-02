@@ -1,13 +1,10 @@
-import { CacheModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AdministratorsService } from './administrators.service';
 import { AdministratorsController } from './administrators.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdministratorEntity } from './entities/administrator.entity';
-import { Repository } from 'typeorm';
 import { RoleEntity } from '../roles/entities/role.entity';
-import { AdministratorsFilterService } from './administrators.filter.service';
-import { RolesService } from '../roles/roles.service';
-import { RoleFilter } from '../roles/roles.filter';
+import { AdministratorsDatatable } from './administrators.datatable';
 import { RolesModule } from '../roles/roles.module';
 
 @Module({
@@ -21,7 +18,7 @@ import { RolesModule } from '../roles/roles.module';
   controllers: [AdministratorsController],
   providers: [
     AdministratorsService,
-    AdministratorsFilterService
+    AdministratorsDatatable
   ],
   exports: [
     AdministratorsService,

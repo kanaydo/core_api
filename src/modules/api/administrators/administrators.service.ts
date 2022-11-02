@@ -1,15 +1,15 @@
-import { CACHE_MANAGER, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Admin, In, Repository } from 'typeorm';
-import { Cache } from 'cache-manager';
 import * as bcrypt from 'bcrypt';
+import { Cache } from 'cache-manager';
+import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
+import { In, Repository } from 'typeorm';
+import { RoleEntity } from '../roles/entities/role.entity';
+import { AdministratorsDatatable } from './administrators.datatable';
 import { CreateAdministratorDto } from './dto/create-administrator.dto';
 import { UpdateAdministratorDto } from './dto/update-administrator.dto';
 import { AdministratorEntity } from './entities/administrator.entity';
-import { RoleEntity } from '../roles/entities/role.entity';
-import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { CorePagingOrder } from './entities/core_paging_order.interface';
-import { AdministratorsFilterService } from './administrators.filter.service';
 
 @Injectable()
 export class AdministratorsService {
@@ -17,7 +17,7 @@ export class AdministratorsService {
     @InjectRepository(AdministratorEntity) private administratorRepository: Repository<AdministratorEntity>,
     @InjectRepository(RoleEntity) private roleRepository: Repository<RoleEntity>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private readonly filterService: AdministratorsFilterService
+    private readonly filterService: AdministratorsDatatable
   ) {}
 
   async create(createAdministratorDto: CreateAdministratorDto): Promise<AdministratorEntity> {
@@ -81,8 +81,6 @@ export class AdministratorsService {
   async paginate(options: IPaginationOptions, order: CorePagingOrder): Promise<Pagination<AdministratorEntity>> {
     const queryBuilder = this.administratorRepository.createQueryBuilder('admin');
 
-    console.log('params ==================>', order);
-
     if (order.order && order.field) {
       const orderTerm = order.order == 'ascend' ? 'ASC' : 'DESC';
       queryBuilder.orderBy(`admin.${order.field}`, orderTerm);
@@ -90,8 +88,7 @@ export class AdministratorsService {
       queryBuilder.orderBy(`admin.id`, 'ASC');
     }
 
-    const filterQuery = this.filterService.parse(order.filters);
-    console.log('query ===============================>', filterQuery);
+    const filterQuery = this.filterService.build(order.filters);
     queryBuilder.where(filterQuery);
     return paginate<AdministratorEntity>(queryBuilder, options);
   }
