@@ -8,6 +8,11 @@ export enum CustomerStatus {
   INACTIVE = "inactive"
 }
 
+export enum CustomerGender {
+  MALE = "male",
+  FEMALE = "female"
+}
+
 @Entity({name: 'customers'})
 export class CustomerEntity extends CoreBaseEntity {
   @Column({type: 'text', name: 'first_name'})
@@ -31,4 +36,17 @@ export class CustomerEntity extends CoreBaseEntity {
     default: CustomerStatus.ACTIVE,
   })
   status: CustomerStatus
+
+  @Column({
+    type: 'enum',
+    enum: CustomerGender,
+    nullable: true
+  })
+  gender?: CustomerGender
+
+  @Column({type: 'text', unique: true, name: 'phone', default: null})
+  phone: string
+
+  @Column({type: 'text', name: 'address', default: null})
+  address: string
 }

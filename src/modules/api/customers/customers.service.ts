@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { CorePagingOrder } from '../administrators/entities/core_paging_order.interface';
-import { CustomerFilter } from './customers.filter';
+import { CustomerFilter } from './customers.datatable';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CustomerEntity } from './entities/customer.entity';
@@ -41,7 +41,7 @@ export class CustomersService {
   async paginate(options: IPaginationOptions, order: CorePagingOrder): Promise<Pagination<CustomerEntity>> {
     const queryBuilder = this.customerRepo.createQueryBuilder('cust');
 
-    console.log('params ==================>', order);
+    // console.log('params ==================>', order);
 
     if (order.order && order.field) {
       const orderTerm = order.order == 'ascend' ? 'ASC' : 'DESC';
@@ -50,8 +50,10 @@ export class CustomersService {
       queryBuilder.orderBy(`cust.id`, 'ASC');
     }
 
-    const filterQuery = this.filterService.parse(order.filters);
-    console.log('query ===============================>', filterQuery);
+    // const filterQuery = this.filterService.parse(order.filters);
+    const filterQuery = this.filterService.build(order.filters);
+    // console.log('query[a] ===============================>', filterQuery);
+    // console.log('query[b] ===============================>', filterQueryOpt);
     queryBuilder.where(filterQuery);
     return paginate<CustomerEntity>(queryBuilder, options);
   }

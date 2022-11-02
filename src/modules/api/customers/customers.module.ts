@@ -3,7 +3,7 @@ import { CustomersService } from './customers.service';
 import { CustomersController } from './customers.controller';
 import { CustomerEntity } from './entities/customer.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomerFilter } from './customers.filter';
+import { CustomerFilter } from './customers.datatable';
 
 @Module({
   imports: [
