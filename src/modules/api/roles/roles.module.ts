@@ -3,7 +3,7 @@ import { RolesService } from './roles.service';
 import { RolesController } from './roles.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoleEntity } from './entities/role.entity';
-import { RoleFilter } from './roles.filter';
+import { RoleDatatable } from './roles.datatable';
 
 @Module({
   imports: [
@@ -12,11 +12,11 @@ import { RoleFilter } from './roles.filter';
   controllers: [RolesController],
   providers: [
     RolesService,
-    RoleFilter
+    RoleDatatable
   ],
   exports: [
     RolesService,
-    RoleFilter
+    RoleDatatable
   ]
 })
 export class RolesModule {}

@@ -1,20 +1,19 @@
-import { Catch, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { validate } from 'class-validator';
 import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
-import { QueryFailedError, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CorePagingOrder } from '../administrators/entities/core_paging_order.interface';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { RoleEntity } from './entities/role.entity';
-import { RoleFilter } from './roles.filter';
+import { RoleDatatable } from './roles.datatable';
 
 @Injectable()
 export class RolesService {
   constructor(
     @InjectRepository(RoleEntity)
     private roleRepository: Repository<RoleEntity>,
-    private readonly filterService: RoleFilter
+    private readonly filterService: RoleDatatable
   ) {}
 
   async create(createRoleDto: CreateRoleDto): Promise<RoleEntity> {
@@ -61,7 +60,7 @@ export class RolesService {
       queryBuilder.orderBy(`role.id`, 'ASC');
     }
 
-    const filterQuery = this.filterService.parse(order.filters);
+    const filterQuery = this.filterService.build(order.filters);
     console.log('query ===============================>', filterQuery);
     queryBuilder.where(filterQuery);
     return paginate<RoleEntity>(queryBuilder, options);
