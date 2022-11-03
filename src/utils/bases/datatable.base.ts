@@ -9,7 +9,7 @@ export default class BaseDatatable {
 
   private anyQuery(key: any, term: any) {
     const filterParams = term as Array<string>;
-        const queryParams = filterParams.map(e => `\'${e}\'`);
+    const queryParams = filterParams.map(e => `\'${e}\'`);
     return `${this.alias}.${key} IN (${queryParams})`;
   }
 
