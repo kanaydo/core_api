@@ -15,13 +15,13 @@ export enum CustomerGender {
 
 @Entity({name: 'customers'})
 export class CustomerEntity extends CoreBaseEntity {
-  @Column({type: 'text', default: null})
+  @Column({type: 'text'})
   firstName: string
 
-  @Column({type: 'text', default: null})
+  @Column({type: 'text'})
   lastName: string
 
-  @Column({type: 'text', unique: true, default: null})
+  @Column({type: 'text', unique: true})
   email: string
 
   @Expose({groups: [CustomerSerializer.DETAIL]})
@@ -44,9 +44,9 @@ export class CustomerEntity extends CoreBaseEntity {
   })
   gender?: CustomerGender
 
-  @Column({type: 'text', unique: true, default: null})
+  @Column({type: 'text', unique: true})
   phone: string
 
-  @Column({type: 'text', default: null})
+  @Column({type: 'text'})
   address: string
 }

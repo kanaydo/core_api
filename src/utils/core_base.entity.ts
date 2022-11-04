@@ -7,11 +7,11 @@ abstract class CoreBaseEntity {
   id: string;
   
   @Transform(({ value }) => format(value, 'dd/MM/yyyy HH:MM:SS'))
-  @CreateDateColumn({name: 'created_at'})
+  @CreateDateColumn()
   createdAt: Date
 
   @Transform(({ value }) => format(value, 'dd/MM/yyyy HH:MM:SS'))
-  @UpdateDateColumn({name: 'updated_at'})
+  @UpdateDateColumn()
   updatedAt: Date  
 }
 

@@ -1,7 +1,5 @@
-import { Expose, Transform } from "class-transformer";
-import { format } from "date-fns";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { WorkUnitSerializer } from "./work_unit.serializer";
+import CoreBaseEntity from "src/utils/core_base.entity";
+import { Column, Entity } from "typeorm";
 
 export enum WorkUnitStatus {
   ACTIVE = "active",
@@ -9,14 +7,12 @@ export enum WorkUnitStatus {
 }
 
 @Entity({name: 'work_units'})
-export class WorkUnitEntity {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+export class WorkUnitEntity extends CoreBaseEntity {
 
-  @Column({type: 'text', unique: true, name: 'name'})
+  @Column({type: 'text', unique: true})
   name: string
 
-  @Column({type: 'text', name: 'description', nullable: true})
+  @Column({type: 'text', nullable: true})
   description?: string
 
   @Column({
@@ -25,13 +21,4 @@ export class WorkUnitEntity {
     default: WorkUnitStatus.ACTIVE,
   })
   status: WorkUnitStatus
-
-  @Transform(({ value }) => format(value, 'dd/MM/yyyy HH:MM:SS'))
-  @CreateDateColumn({name: 'created_at'})
-  createdAt: Date
-
-  @Expose({groups: [WorkUnitSerializer.DETAIL]})
-  @Transform(({ value }) => format(value, 'dd/MM/yyyy HH:MM:SS'))
-  @UpdateDateColumn({name: 'updated_at'})
-  updatedAt: Date
 }

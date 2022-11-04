@@ -1,6 +1,6 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
-import { format } from 'date-fns'
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Exclude, Expose } from 'class-transformer';
+import CoreBaseEntity from 'src/utils/core_base.entity';
+import { Column, Entity } from "typeorm";
 import { AdministratorSerializer } from './administrator.serializer';
 
 export enum AdministratorStatus {
@@ -9,23 +9,16 @@ export enum AdministratorStatus {
 }
 
 @Entity({name: 'administrators'})
-export class AdministratorEntity {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
-
-  @Column({type: 'text', unique: true, name: 'username'})
+export class AdministratorEntity extends CoreBaseEntity {
+  @Column({type: 'text', unique: true})
   username: string
 
   @Exclude()
-  @Column({type: 'text', name: 'password_digest'})
+  @Column({type: 'text'})
   passwordDigest: string
 
-  @Transform(({ value }) => format(value, 'dd/MM/yyyy HH:MM:SS'))
-  @CreateDateColumn({name: 'created_at'})
-  createdAt: Date
-
   @Expose({groups: [AdministratorSerializer.DETAIL]})
-  @Column("simple-array", { name: 'role_list', nullable: true })
+  @Column("simple-array", { nullable: true })
   roleList: string[];
 
   @Column({
