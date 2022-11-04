@@ -13,9 +13,10 @@ export class QueryFailedExceptionFilter implements ExceptionFilter {
 
     switch(exception.constructor) {
       case QueryFailedError:
-        const { name, driverError: { detail } } = exception as QueryFailedError;
+        const { driverError: { detail, table } } = exception as QueryFailedError;
         statusCode = HttpStatus.UNPROCESSABLE_ENTITY;
-        errorMessage = `${name} - ${detail}`;
+        const messageStart = table.split('_').join(' ') + ' with';
+        errorMessage = `${detail}`.replace('Key', messageStart);
         break;
       case EntityNotFoundError:
         const { message } = exception as EntityNotFoundError;

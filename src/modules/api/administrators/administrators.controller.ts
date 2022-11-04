@@ -1,7 +1,7 @@
-import { Body, ClassSerializerInterceptor, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, SerializeOptions, UseFilters, UseInterceptors } from '@nestjs/common';
-import { QueryFailedExceptionFilter } from 'src/utils/query_failed_exception.filter';
+import { Body, ClassSerializerInterceptor, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, SerializeOptions, UseInterceptors } from '@nestjs/common';
 import { RequirePermissions } from 'src/utils/require_permissions.decorator';
 import { RolesService } from '../roles/roles.service';
+import { Request } from 'express';
 import { AdministratorPermissions } from './administrators.permissions';
 import { AdministratorsService } from './administrators.service';
 import { CreateAdministratorDto } from './dto/create-administrator.dto';
@@ -20,7 +20,9 @@ export class AdministratorsController {
 
   @Post()
   @RequirePermissions(AdministratorPermissions.ADMINISTRATOR_CREATE)
-  create(@Body() createAdministratorDto: CreateAdministratorDto) {
+  create(
+    @Body() createAdministratorDto: CreateAdministratorDto
+  ) {
     return this.administratorsService.create(createAdministratorDto);
   }
 

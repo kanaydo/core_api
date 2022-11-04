@@ -15,7 +15,11 @@ export class CustomersService {
     private readonly filterService: CustomerDatatable
   ) { }
 
-  async create(createCustomerDto: CreateCustomerDto) : Promise<CustomerEntity> {
+  async create(
+    createCustomerDto: CreateCustomerDto,
+    administrator: Express.User
+  ) : Promise<CustomerEntity> {
+    // const customerParams = 
     const customer = this.customerRepo.create(createCustomerDto);
     return await this.customerRepo.save(customer);
   }

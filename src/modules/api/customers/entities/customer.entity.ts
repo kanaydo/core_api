@@ -1,6 +1,6 @@
 import { Expose } from "class-transformer";
 import CoreBaseEntity from "src/utils/core_base.entity";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, Unique } from "typeorm";
 import { CustomerSerializer } from "./customer.serializer";
 
 export enum CustomerStatus {
@@ -15,13 +15,13 @@ export enum CustomerGender {
 
 @Entity({name: 'customers'})
 export class CustomerEntity extends CoreBaseEntity {
-  @Column({type: 'text', name: 'first_name'})
+  @Column({type: 'text', default: null})
   firstName: string
 
-  @Column({type: 'text', name: 'last_name'})
+  @Column({type: 'text', default: null})
   lastName: string
 
-  @Column({type: 'text', unique: true, name: 'email'})
+  @Column({type: 'text', unique: true, default: null})
   email: string
 
   @Expose({groups: [CustomerSerializer.DETAIL]})
@@ -44,9 +44,9 @@ export class CustomerEntity extends CoreBaseEntity {
   })
   gender?: CustomerGender
 
-  @Column({type: 'text', unique: true, name: 'phone', default: null})
+  @Column({type: 'text', unique: true, default: null})
   phone: string
 
-  @Column({type: 'text', name: 'address', default: null})
+  @Column({type: 'text', default: null})
   address: string
 }
