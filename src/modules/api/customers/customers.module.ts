@@ -4,6 +4,8 @@ import { CustomersController } from './customers.controller';
 import { CustomerEntity } from './entities/customer.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerDatatable } from './customers.datatable';
+import { UniqueConstraint } from 'src/utils/validators/unique.validator';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -17,4 +19,6 @@ import { CustomerDatatable } from './customers.datatable';
     CustomerDatatable
   ]
 })
-export class CustomersModule {}
+export class CustomersModule {
+  // constructor(private dataSource: DataSource) {}
+}

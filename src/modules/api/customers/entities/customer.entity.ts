@@ -1,6 +1,8 @@
 import { Expose, instanceToPlain, Transform, Type } from "class-transformer";
+import { Validate } from "class-validator";
 import CoreBaseEntity from "src/utils/core_base.entity";
-import { Column, Entity, JoinColumn, OneToOne, Unique } from "typeorm";
+import { Unique } from "src/utils/validators/unique.validator";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { AdministratorEntity } from "../../administrators/entities/administrator.entity";
 import { CustomerSerializer } from "./customer.serializer";
 
@@ -51,7 +53,8 @@ export class CustomerEntity extends CoreBaseEntity {
   @Column({type: 'text'})
   address: string
 
-  @OneToOne(() => AdministratorEntity)
-  @JoinColumn()
+  // @OneToOne(() => AdministratorEntity)
+  @ManyToOne(() => AdministratorEntity, (adm) => adm.customers)
+  // @JoinColumn()
   administrator: AdministratorEntity
 }

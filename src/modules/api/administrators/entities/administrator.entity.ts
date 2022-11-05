@@ -1,6 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import CoreBaseEntity from 'src/utils/core_base.entity';
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
+import { CustomerEntity } from '../../customers/entities/customer.entity';
 import { AdministratorSerializer } from './administrator.serializer';
 
 export enum AdministratorStatus {
@@ -11,11 +12,11 @@ export enum AdministratorStatus {
 @Entity({name: 'administrators'})
 export class AdministratorEntity extends CoreBaseEntity {
   @Column({type: 'text', unique: true})
-  username: string
+  username: string;
 
   @Exclude()
   @Column({type: 'text'})
-  passwordDigest: string
+  passwordDigest: string;
 
   @Expose({groups: [AdministratorSerializer.DETAIL]})
   @Column("simple-array", { nullable: true })
@@ -27,11 +28,15 @@ export class AdministratorEntity extends CoreBaseEntity {
     enum: AdministratorStatus,
     default: AdministratorStatus.ACTIVE,
   })
-  status: AdministratorStatus
+  status: AdministratorStatus;
 
   @Expose({groups: [AdministratorSerializer.DETAIL]})
-  updatedAt: Date
+  updatedAt: Date;
 
   @Expose({groups: [AdministratorSerializer.DETAIL]})
-  createdAt: Date
+  createdAt: Date;
+
+  @OneToMany(() => CustomerEntity, (cust) => cust.administrator)
+  customers: CustomerEntity[];
+
 }

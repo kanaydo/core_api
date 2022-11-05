@@ -1,5 +1,6 @@
 
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 // import { AdministratorSubscriber } from 'src/modules/administrators/entities/administrator.subscriber';
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
@@ -23,4 +24,8 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       logging: true,
     };
   },
+  // dataSourceFactory: async (options) => {
+  //   const dataSource = await new DataSource(options!).initialize();
+  //   return dataSource;
+  // },
 };

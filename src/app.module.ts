@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { typeOrmAsyncConfig } from './config/typeorm.config';
 import { AppLoggerMiddleware } from './logger.middleware';
 import { ApiModule } from './modules/api/api.module';
+import { UniqueConstraint } from './utils/validators/unique.validator';
 
 
 @Module({
@@ -23,13 +24,15 @@ import { ApiModule } from './modules/api/api.module';
   controllers: [AppController],
   providers: [
     AppService,
+    UniqueConstraint,
   ],
   exports: [
     CacheModule
   ]
 })
 export class AppModule implements NestModule {
-  constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource) { }
+
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AppLoggerMiddleware).forRoutes('*');
   }
