@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, SerializeOptions, Query, DefaultValuePipe, ParseIntPipe, Req } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, SerializeOptions, UseInterceptors } from '@nestjs/common';
+import { Request } from 'express';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CustomerSerializer } from './entities/customer.serializer';
-import { Request } from 'express';
 
 @Controller('customers')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -38,7 +38,11 @@ export class CustomersController {
   }
 
   @Get(':id')
-  @SerializeOptions({ groups: [CustomerSerializer.DETAIL] })
+  @SerializeOptions({
+    groups: [
+      CustomerSerializer.DETAIL
+    ] 
+  })
   findOne(@Param('id') id: string) {
     return this.customersService.findOne(id);
   }

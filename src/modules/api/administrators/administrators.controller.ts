@@ -32,6 +32,7 @@ export class AdministratorsController {
   }
 
   @Get()
+  @SerializeOptions({ groups: [AdministratorSerializer.INDEX] })
   @RequirePermissions(AdministratorPermissions.ADMINISTRATOR_INDEX)
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,

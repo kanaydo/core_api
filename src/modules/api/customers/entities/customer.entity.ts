@@ -1,6 +1,7 @@
-import { Expose } from "class-transformer";
+import { Expose, instanceToPlain, Transform, Type } from "class-transformer";
 import CoreBaseEntity from "src/utils/core_base.entity";
-import { Column, Entity, Unique } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, Unique } from "typeorm";
+import { AdministratorEntity } from "../../administrators/entities/administrator.entity";
 import { CustomerSerializer } from "./customer.serializer";
 
 export enum CustomerStatus {
@@ -49,4 +50,8 @@ export class CustomerEntity extends CoreBaseEntity {
 
   @Column({type: 'text'})
   address: string
+
+  @OneToOne(() => AdministratorEntity)
+  @JoinColumn()
+  administrator: AdministratorEntity
 }

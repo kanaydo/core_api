@@ -17,19 +17,30 @@ export class CustomersService {
 
   async create(
     createCustomerDto: CreateCustomerDto,
-    administrator: Express.User
+    administrator: any
   ) : Promise<CustomerEntity> {
-    // const customerParams = 
-    const customer = this.customerRepo.create(createCustomerDto);
+    const customerParams = { ...createCustomerDto, administrator: administrator.id };
+    const customer = this.customerRepo.create(customerParams);
     return await this.customerRepo.save(customer);
   }
 
   findAll() : Promise<CustomerEntity[]> {
-    return this.customerRepo.find();
+    return this.customerRepo.find({
+      relations: {
+        administrator: true
+      }
+    });
   }
 
   findOne(id: string) : Promise<CustomerEntity | null> {
-    return this.customerRepo.findOneByOrFail({id: id});
+    return this.customerRepo.findOne({
+      where: {
+        id: id
+      },
+      relations: {
+        administrator: true
+      }
+    });
   }
 
   async update(id: string, updateCustomerDto: UpdateCustomerDto): Promise<CustomerEntity> {
@@ -44,8 +55,7 @@ export class CustomersService {
 
   async paginate(options: IPaginationOptions, order: CorePagingOrder): Promise<Pagination<CustomerEntity>> {
     const queryBuilder = this.customerRepo.createQueryBuilder('cust');
-
-    // console.log('params ==================>', order);
+    queryBuilder.leftJoinAndSelect("cust.administrator", "administrator");
 
     if (order.order && order.field) {
       const orderTerm = order.order == 'ascend' ? 'ASC' : 'DESC';
@@ -54,10 +64,7 @@ export class CustomersService {
       queryBuilder.orderBy(`cust.id`, 'ASC');
     }
 
-    // const filterQuery = this.filterService.parse(order.filters);
     const filterQuery = this.filterService.build(order.filters);
-    // console.log('query[a] ===============================>', filterQuery);
-    // console.log('query[b] ===============================>', filterQueryOpt);
     queryBuilder.where(filterQuery);
     return paginate<CustomerEntity>(queryBuilder, options);
   }

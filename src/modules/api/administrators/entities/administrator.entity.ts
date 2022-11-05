@@ -21,10 +21,17 @@ export class AdministratorEntity extends CoreBaseEntity {
   @Column("simple-array", { nullable: true })
   roleList: string[];
 
+  @Expose({groups: [AdministratorSerializer.DETAIL, AdministratorSerializer.INDEX]})
   @Column({
     type: 'enum',
     enum: AdministratorStatus,
     default: AdministratorStatus.ACTIVE,
   })
   status: AdministratorStatus
+
+  @Expose({groups: [AdministratorSerializer.DETAIL]})
+  updatedAt: Date
+
+  @Expose({groups: [AdministratorSerializer.DETAIL]})
+  createdAt: Date
 }

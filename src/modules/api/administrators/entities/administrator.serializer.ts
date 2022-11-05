@@ -1,4 +1,5 @@
 export enum AdministratorSerializer {
   DETAIL = 'detail',
-  INDEX = 'index'
+  INDEX = 'index',
+  LABEL = 'label'
 }

@@ -1,4 +1,4 @@
 export enum CustomerSerializer {
-  DETAIL = 'detail',
-  INDEX = 'index'
+  DETAIL = 'customer_detail',
+  INDEX = 'customer_index'
 }
