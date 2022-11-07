@@ -6,10 +6,13 @@ import { DatatableCondition } from "src/utils/enums/datatable.enum";
 export class AdministratorsDatatable extends BaseDatatable {
   constructor() {
     super({
-      status:  DatatableCondition.ANY,
-      username: DatatableCondition.LIKE,
-      createdAt: DatatableCondition.RANGE
-    }, "admin");
+      alias: "admin",
+      rules: {
+        status:  DatatableCondition.ANY,
+        username: DatatableCondition.LIKE,
+        createdAt: DatatableCondition.RANGE
+      }
+    });
   }
 
   build(filters: any) {

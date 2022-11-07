@@ -6,10 +6,13 @@ import { DatatableCondition } from "src/utils/enums/datatable.enum";
 export class RoleDatatable extends BaseDatatable {
   constructor() {
     super({
-      status:  DatatableCondition.ANY,
-      name: DatatableCondition.LIKE,
-      createdAt: DatatableCondition.RANGE
-    }, "role");
+      alias: "role",
+      rules: {
+        status:  DatatableCondition.ANY,
+        name: DatatableCondition.LIKE,
+        createdAt: DatatableCondition.RANGE
+      }
+    });
   }
 
   build(filters: any) {

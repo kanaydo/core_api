@@ -1,10 +1,22 @@
 import { camelToSnakeCase } from "../case";
 import { DatatableCondition } from "../enums/datatable.enum";
 
+
+export interface BaseDatatableProps {
+  alias: string
+  rules: any, 
+  relationsRule?: any
+}
+
 export default class BaseDatatable {
-  constructor(public rules: any, public alias: string) {
-    this.rules = rules;
-    this.alias = alias;
+  alias: string;
+  rules: any;
+  relationsRule?: any
+
+  constructor(public props: BaseDatatableProps) {
+    this.rules = props.rules;
+    this.alias = props.alias;
+    this.relationsRule = props.relationsRule;
   }
 
   private anyQuery(key: any, term: any) {

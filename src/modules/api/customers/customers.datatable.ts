@@ -6,13 +6,21 @@ import { DatatableCondition } from "src/utils/enums/datatable.enum";
 export class CustomerDatatable extends BaseDatatable {
   constructor() { 
     super({
-      status:  DatatableCondition.ANY,
-      firstName: DatatableCondition.LIKE,
-      email: DatatableCondition.LIKE,
-      phone: DatatableCondition.LIKE,
-      address: DatatableCondition.LIKE,
-      createdAt: DatatableCondition.RANGE
-    }, "cust");
+      alias: "cust",
+      rules: {
+        status:  DatatableCondition.ANY,
+        firstName: DatatableCondition.LIKE,
+        email: DatatableCondition.LIKE,
+        phone: DatatableCondition.LIKE,
+        address: DatatableCondition.LIKE,
+        createdAt: DatatableCondition.RANGE
+      },
+      relationsRule: {
+        administrator: {
+          username: DatatableCondition.LIKE
+        }
+      }  
+    });
   }
 
   build(filters: any) {
