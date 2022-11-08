@@ -1,10 +1,9 @@
 import { camelToSnakeCase } from "../case";
 import { DatatableCondition } from "../enums/datatable.enum";
 
-
 export interface BaseDatatableProps {
   alias: string
-  rules: any, 
+  rules: any,
   relationsRule?: any
 }
 
@@ -19,55 +18,80 @@ export default class BaseDatatable {
     this.relationsRule = props.relationsRule;
   }
 
-  private anyQuery(key: any, term: any) {
+  private anyQuery(key: any, term: any, tAlias: any) {
     const filterParams = term as Array<string>;
     const queryParams = filterParams.map(e => `\'${e}\'`);
-    return `${this.alias}.${key} IN (${queryParams})`;
+    return `${tAlias}.${key} IN (${queryParams})`;
   }
 
-  private equalQuery(key: any, term: any) {
-    return `${this.alias}.${key} = (${term})`;
+  private equalQuery(key: any, term: any, tAlias: any) {
+    return `${tAlias}.${key} = (${term})`;
   }
 
-  private likeQuery(key: any, term: any) {
-    return `LOWER(${this.alias}.${key}) LIKE LOWER(\'%${term}%\')`;
+  private likeQuery(key: any, term: any, tAlias: any) {
+    return `LOWER(${tAlias}.${key}) LIKE LOWER(\'%${term}%\')`;
   }
 
-  private rangeQuery(key: any, term: any) {
+  private rangeQuery(key: any, term: any, tAlias: any) {
     const filterParams = term as Array<string>;
     const dStart = new Date(filterParams[0]);
     const dEnd = new Date(filterParams[1]);
-    return `${this.alias}.${key} BETWEEN \'${dStart.toISOString()}\' AND \'${dEnd.toISOString()}\'`;
+    return `${tAlias}.${key} BETWEEN \'${dStart.toISOString()}\' AND \'${dEnd.toISOString()}\'`;
   }
 
-  private buildConditonQuery(cond: any, term: any, key: any) {
-    switch(cond) { 
-      case DatatableCondition.EQUAL: { 
-        return this.equalQuery(key, term); 
-      } 
-      case DatatableCondition.ANY: { 
-        return this.anyQuery(key, term);
+  private buildConditonQuery(term: any, key: any) {
+    const isAssociation = this.isAssociationField(key);
+    let condition = this.rules[key];
+    let tableAlias = this.alias;
+    let fieldKey = key;
+
+    if (isAssociation) {
+      const assoc = this.relationsRule[key];
+      condition = assoc?.cond;
+      tableAlias = assoc?.alias;
+      fieldKey = assoc?.field;
+    }
+
+    console.log(condition, tableAlias, fieldKey);
+
+    switch (condition) {
+      case DatatableCondition.EQUAL: {
+        return this.equalQuery(fieldKey, term, tableAlias);
       }
-      case DatatableCondition.LIKE: { 
-        return this.likeQuery(key, term);
+      case DatatableCondition.ANY: {
+        return this.anyQuery(fieldKey, term, tableAlias);
       }
-      case DatatableCondition.RANGE: { 
-        return this.rangeQuery(key, term);
-      } 
-      default: { 
+      case DatatableCondition.LIKE: {
+        return this.likeQuery(fieldKey, term, tableAlias);
+      }
+      case DatatableCondition.RANGE: {
+        return this.rangeQuery(fieldKey, term, tableAlias);
+      }
+      default: {
         return '';
-      } 
-    } 
-  } 
+      }
+    }
+  }
 
-  getQueryString(filters: any) : string {
+  private isAssociationField(key: any) : boolean {
+    return key in this.relationsRule;
+  }
+
+  private isHandledField(key: any): boolean {
+    const isEntityField = key in this.rules;
+    const isRelationField = key in this.relationsRule;
+    return isEntityField || isRelationField;
+  }
+
+  getQueryString(filters: any): string {
     let query = '';
-    for (const [key, value] of Object.entries(this.rules)) {
-      const term = filters[key];
-      if (!term) continue;
+    for (const [key, value] of Object.entries(filters)) {
+      if (value === '') continue;
 
-      const tKey = camelToSnakeCase(key);
-      const condition = this.buildConditonQuery(value, term, tKey);
+      const cond = this.isHandledField(key);
+      if (!cond) continue;
+
+      const condition = this.buildConditonQuery(value, key);
       if (condition === '') continue;
 
       if (query === '') {
@@ -75,7 +99,9 @@ export default class BaseDatatable {
       } else {
         query += ` AND ${condition}`
       }
+
     }
+    console.log(query);
     return query;
   }
 }

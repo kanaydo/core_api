@@ -55,7 +55,7 @@ export class CustomersService {
 
   async paginate(options: IPaginationOptions, order: CorePagingOrder): Promise<Pagination<CustomerEntity>> {
     const queryBuilder = this.customerRepo.createQueryBuilder('cust');
-    queryBuilder.leftJoinAndSelect("cust.administrator", "administrator");
+    queryBuilder.leftJoinAndSelect("cust.administrator", "admin");
 
     if (order.order && order.field) {
       const orderTerm = order.order == 'ascend' ? 'ASC' : 'DESC';

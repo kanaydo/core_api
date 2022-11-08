@@ -17,7 +17,9 @@ export class CustomerDatatable extends BaseDatatable {
       },
       relationsRule: {
         administrator: {
-          username: DatatableCondition.LIKE
+          alias: 'admin',
+          field: 'username',
+          cond: DatatableCondition.LIKE
         }
       }  
     });
